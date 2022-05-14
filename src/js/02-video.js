@@ -1,24 +1,31 @@
-//3.Инициализируй плеер в файле скрипта как это описано в секции pre-existing player, но учти что у тебя плеер добавлен как npm пакет, а не через CDN.
 //import Player from '@vimeo/player';
 
 const iframe = document.querySelector('iframe'); // подклювидео к плееру
 const player = new Vimeo.Player(iframe); // подкл обраб изменю времени видео
+const videoLocalStorage = 'videoplayer - current - time';
 
-player.on('timeupdate', function () {
-  console.log('played the video!');
-});
+player.on('timeupdate', onPlay);
+player.on('loaded', afterPlay);
 
-player.getVideoTitle().then(function (title) {
-  console.log('title:', title);
-});
+function onPlay() {
+  player.getCurrentTime().then(function (seconds) {
+    localStorage.setItem(videoLocalStorage, seconds); //Получить текущую позицию воспроизведения в секундах.
+  });
+}
 
-//Разбери документацию метода on() и начни отслеживать событие timeupdate - обновление времени воспроизведения.
-player.on('eventName', function (timeupdate) {
-  // data is an object containing properties specific to that event
-});
-//Сохраняй время воспроизведения в локальное хранилище. Пусть ключом для хранилища будет строка "videoplayer-current-time".
-//console.log(localStorage);
+function afterPlay() {
+  const savedTime = localStorage.getItem(videoLocalStorage);
+  player
+    .setCurrentTime(savedTime)
+    .then(function (seconds) {
+      console.log(seconds);
+    })
+    .catch(function (error) {
+      switch (error.name) {
+        case 'RangeError':
+          break;
+      }
+    });
+}
 
-//localStorage.setItem('key', 'videoplayer-current-time');
-//Прочитать из localStorage:
-//console.log(localStorage.getItem('key'));
+//player.getVideoTitle().then(function (title) {
