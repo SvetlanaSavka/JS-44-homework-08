@@ -1,23 +1,22 @@
 import throttle from 'lodash.throttle';
 
 const STORAGE_KEY = 'feedback-form-state';
-
 const formData = {};
 
 const refs = {
   form: document.querySelector('.feedback-form'), //объявляем элемент по классу
-  textarea: document.querySelector('.feedback-form textarea'), //объявляем элемент по классу
+  messageEl: document.querySelector('.feedback-form textarea'), //объявляем элемент по классу
   emailEl: document.querySelector('.feedback-form input'),
 };
 populateTextarea();
 
 refs.form.addEventListener('submit', onFormSubmit); //подписываемся на событие и вызываем функцию по клику на кнопку
-refs.textarea.addEventListener('input', throttle(onTextareaInput, 500)); //подписываемся на событие и вызываем функцию по клику на кнопку
+refs.form.addEventListener('input', throttle(onTextareaInput, 500)); //подписываемся на событие и вызываем функцию по клику на кнопку
 
 function onFormSubmit(evt) {
   evt.preventDefault();
 
-  if (refs.emailEl.value === '' || refs.textarea.value === '') {
+  if (refs.emailEl.value === '' || refs.messageEl.value === '') {
     alert('Заполните все поля');
     return;
   }
@@ -42,9 +41,8 @@ function populateTextarea() {
   if (savedMessage) {
     //проверяем если что-то есть, тогда выполняем код, если нет "if" не выполн.
     refs.emailEl.value = savedMessage.email; //обновляем DOM refs.textarea записываем  value
-    refs.textarea.value = savedMessage.message; // обновляем DOM refs.textarea записываем  value
+    refs.messageEl.value = savedMessage.message; // обновляем DOM refs.textarea записываем  value
     formData.email = savedMessage.email;
     formData.message = savedMessage.message;
   }
 }
-
