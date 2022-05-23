@@ -1,7 +1,7 @@
 import throttle from 'lodash.throttle';
 
 const STORAGE_KEY = 'feedback-form-state';
-const formData = {};
+let formData = {};
 
 const refs = {
   form: document.querySelector('.feedback-form'), //объявляем элемент по классу
@@ -18,18 +18,20 @@ function onFormSubmit(evt) {
 
   if (refs.emailEl.value === '' || refs.messageEl.value === '') {
     alert('Заполните все поля');
+
     return;
   }
+
   console.log(JSON.parse(localStorage.getItem(STORAGE_KEY)));
   evt.currentTarget.reset(); //очищаем форму после отправки
 
   localStorage.removeItem(STORAGE_KEY); //очищаем хранилище после отправки
+  formData = {};
 }
 //Получаем значение поля
 
 function onTextareaInput(evt) {
   formData[evt.target.name] = evt.target.value;
-  //const message = evt.target.value;
 
   localStorage.setItem(STORAGE_KEY, JSON.stringify(formData)); //Сохраняем его в хранилеще
 }
@@ -40,8 +42,8 @@ function populateTextarea() {
 
   if (savedMessage) {
     //проверяем если что-то есть, тогда выполняем код, если нет "if" не выполн.
-    refs.emailEl.value = savedMessage.email; //обновляем DOM refs.textarea записываем  value
-    refs.messageEl.value = savedMessage.message; // обновляем DOM refs.textarea записываем  value
+    refs.emailEl.value = savedMessage?.email; //обновляем DOM refs.textarea записываем  value
+    refs.messageEl.value = savedMessage?.message; // обновляем DOM refs.textarea записываем  value
     formData.email = savedMessage.email;
     formData.message = savedMessage.message;
   }
