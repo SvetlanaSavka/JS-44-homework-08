@@ -39,12 +39,13 @@ function onTextareaInput(evt) {
 // обновляем DOM
 function populateTextarea() {
   const savedMessage = JSON.parse(localStorage.getItem(STORAGE_KEY)); //Получаем значение из хранилища
-
-  if (savedMessage) {
-    //проверяем если что-то есть, тогда выполняем код, если нет "if" не выполн.
-    refs.emailEl.value = savedMessage?.email; //обновляем DOM refs.textarea записываем  value
-    refs.messageEl.value = savedMessage?.message; // обновляем DOM refs.textarea записываем  value
-    formData.email = savedMessage.email;
+  //проверяем если что-то есть, тогда выполняем код, если нет "if" не выполн.
+  if (savedMessage?.message) {
+    refs.messageEl.value = savedMessage?.message; //обновляем DOM refs.textarea записываем  value
     formData.message = savedMessage.message;
+  }
+  if (savedMessage?.email) {
+    refs.emailEl.value = savedMessage?.email; //обновляем DOM refs.textarea записываем  value
+    formData.email = savedMessage.email;
   }
 }
