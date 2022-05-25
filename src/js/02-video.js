@@ -1,11 +1,13 @@
 //import Player from '@vimeo/player';
 
+import throttle from 'lodash.throttle';
+
 const iframe = document.querySelector('iframe'); // подклювидео к плееру
 const player = new Vimeo.Player(iframe); // подкл обраб изменю времени видео
 const videoLocalStorage = 'videoplayer - current - time';
 
 player.on('timeupdate', onPlay);
-player.on('loaded', afterPlay);
+player.on('loaded', throttle(afterPlay, 1000));
 
 function onPlay() {
   player.getCurrentTime().then(function (seconds) {
